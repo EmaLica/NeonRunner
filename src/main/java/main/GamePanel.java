@@ -17,7 +17,7 @@ public class GamePanel extends JPanel {
     private MouseInputs mouseInputs;
     private float xDelta = 100, yDelta = 100;
     private BufferedImage img;
-    private BufferedImage[] idleAni;
+    private BufferedImage[][] animations;
     private int aniTick, aniIndex, aniSpeed = 40;
 
     public GamePanel() {
