@@ -13,6 +13,7 @@ import inputs.KeyboardInputs;
 import inputs.MouseInputs;
 
 import static utils.Constants.PlayerConstants.*;
+import static utils.Constants.Directions.*;
 
 public class GamePanel extends JPanel {
 
@@ -22,9 +23,10 @@ public class GamePanel extends JPanel {
     private BufferedImage[][] animations;
     private int aniTick, aniIndex, aniSpeed = 40;
     private int playerAction = IDLE;
+    private int playerDir = -1;
+    private boolean moving = false;
 
     public GamePanel() {
-
         mouseInputs = new MouseInputs(this);
 
         importImg();
@@ -34,7 +36,6 @@ public class GamePanel extends JPanel {
         addKeyListener(new KeyboardInputs(this));
         addMouseListener(mouseInputs);
         addMouseMotionListener(mouseInputs);
-
     }
 
     private void loadAnimations() {
@@ -71,22 +72,15 @@ public class GamePanel extends JPanel {
         setMinimumSize(size);
         setPreferredSize(size);
         setMaximumSize(size);
-
     }
 
-    public void changeXDelta(int value) {
-        this.xDelta += value;
-
+    public void setDirection(int direction) {
+        this.playerAction = direction;
+        moving = true;
     }
 
-    public void changeYDelta(int value) {
-        this.yDelta += value;
-
-    }
-
-    public void setRectPos(int x, int y) {
-        this.xDelta = x;
-        this.yDelta = y;
+    public void setMoving(boolean moving){
+        this.moving = moving;
     }
 
     public void paintComponent(Graphics g) {
@@ -98,8 +92,38 @@ public class GamePanel extends JPanel {
          */
         updateAnimationTick();
         //subImg = img.getSubimage(1*48,1*48,48,48);
-        g.drawImage(animations[playerAction][aniIndex], (int) xDelta, (int) yDelta,94,96, null);
+        setAnimation();
+        updatePos();
+        g.drawImage(animations[playerAction][aniIndex], (int) xDelta, (int) yDelta,138,144, null);
     }
+
+    private void updatePos() {
+        if(moving){
+            switch(playerDir){
+                case LEFT:
+                    xDelta -= 5;
+                    break;
+                case UP:
+                    yDelta -= 5;
+                    break;
+                case RIGHT:
+                    xDelta += 5;
+                    break;
+                case DOWN:
+                    yDelta += 5;
+                    break;
+            }
+        }
+    }
+
+    private void setAnimation() {
+        if(moving)
+            playerAction = RUN;
+        else
+            playerAction = IDLE;
+    }
+
+
 
     private void updateAnimationTick() {
         aniTick++;
