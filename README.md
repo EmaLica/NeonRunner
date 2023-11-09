@@ -28,9 +28,9 @@ To play **NeonRunner**, follow these simple steps:
 
 ## Controls
 
-- Arrow keys for movement.
+- WASD keys for movement.
 - Spacebar for jumping.
-- "X" for shooting (if your character is equipped with a weapon).
+- Left mouse button for shooting (if your character is equipped with a weapon).
 
 ## Contributing
 
