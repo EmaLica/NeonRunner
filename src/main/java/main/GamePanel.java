@@ -12,6 +12,8 @@ import javax.swing.JPanel;
 import inputs.KeyboardInputs;
 import inputs.MouseInputs;
 
+import static utils.Constants.PlayerConstants.*;
+
 public class GamePanel extends JPanel {
 
     private MouseInputs mouseInputs;
@@ -19,6 +21,7 @@ public class GamePanel extends JPanel {
     private BufferedImage img;
     private BufferedImage[][] animations;
     private int aniTick, aniIndex, aniSpeed = 40;
+    private int playerAction = IDLE;
 
     public GamePanel() {
 
@@ -35,11 +38,13 @@ public class GamePanel extends JPanel {
     }
 
     private void loadAnimations() {
-        idleAni = new BufferedImage[4];
+        animations = new BufferedImage[12][8];
         //y = 7 perche' nello sprite alla posizione y = 7
         //sono presenti le 4 animazioni idle (inattivo)
-        for (int i = 0; i < idleAni.length; i++){
-            idleAni[i] = img.getSubimage(i, 7,46,48);
+        for (int j = 0; j < animations.length; j++){
+            for (int i = 0; i < animations[j].length; i++){
+                animations[j][i] = img.getSubimage(i*46, j*48,46,48);
+            }
         }
 
     }
@@ -93,7 +98,7 @@ public class GamePanel extends JPanel {
          */
         updateAnimationTick();
         //subImg = img.getSubimage(1*48,1*48,48,48);
-        g.drawImage(idleAni[aniIndex], (int) xDelta, (int) yDelta,94,96, null);
+        g.drawImage(animations[playerAction][aniIndex], (int) xDelta, (int) yDelta,94,96, null);
     }
 
     private void updateAnimationTick() {
@@ -101,7 +106,7 @@ public class GamePanel extends JPanel {
         if(aniTick >= aniSpeed){
             aniTick = 0;
             aniIndex++;
-            if(aniIndex >= idleAni.length)
+            if(aniIndex >= getSpriteAmount(playerAction))
                 aniIndex = 0;
         }
     }
