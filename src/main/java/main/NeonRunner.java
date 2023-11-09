@@ -2,12 +2,14 @@ package main;
 
 public class NeonRunner {
 
-    private GameWindow window;
+    private GameWindow gameWindow;
     private GamePanel gamePanel;
 
-    public NeonRunner(){
+    public NeonRunner() {
         gamePanel = new GamePanel();
-        window = new GameWindow(gamePanel);
+        gameWindow = new GameWindow(gamePanel);
+        gamePanel.requestFocus();
+
 
     }
 
