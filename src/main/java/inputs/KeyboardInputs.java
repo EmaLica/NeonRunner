@@ -3,7 +3,6 @@ package inputs;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import main.NeonRunner;
 import main.GamePanel;
 
 public class KeyboardInputs implements KeyListener {
