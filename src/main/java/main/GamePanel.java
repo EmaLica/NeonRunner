@@ -16,18 +16,31 @@ public class GamePanel extends JPanel {
 
     private MouseInputs mouseInputs;
     private float xDelta = 100, yDelta = 100;
-    private BufferedImage img, subImg;
+    private BufferedImage img;
+    private BufferedImage[] idleAni;
+    private int aniTick, aniIndex, aniSpeed = 40;
 
     public GamePanel() {
 
         mouseInputs = new MouseInputs(this);
 
         importImg();
+        loadAnimations();
 
         setPanelSize();
         addKeyListener(new KeyboardInputs(this));
         addMouseListener(mouseInputs);
         addMouseMotionListener(mouseInputs);
+
+    }
+
+    private void loadAnimations() {
+        idleAni = new BufferedImage[4];
+        //y = 7 perche' nello sprite alla posizione y = 7
+        //sono presenti le 4 animazioni idle (inattivo)
+        for (int i = 0; i < idleAni.length; i++){
+            idleAni[i] = img.getSubimage(i, 7,46,48);
+        }
 
     }
 
@@ -38,6 +51,12 @@ public class GamePanel extends JPanel {
             img = ImageIO.read(is);
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            try{
+                is.close();
+            } catch (IOException cagacazzo) {
+                cagacazzo.printStackTrace();
+            }
         }
 
     }
@@ -67,14 +86,24 @@ public class GamePanel extends JPanel {
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        //subImg = img.getSubimage(1*48,3*48,48,48);
         /**
          * Nello sprite biker.png, il player e' 48x48
          * e come se fosse "battaglia navale" per prendere un altro sprite,
          * uso le sue coordinate come se fosse una matrice e le moltiplico per i pixel (48)
          */
-        subImg = img.getSubimage(1*48,1*48,48,48);
-        g.drawImage(subImg, (int) xDelta, (int) yDelta,96,96, null);
+        updateAnimationTick();
+        //subImg = img.getSubimage(1*48,1*48,48,48);
+        g.drawImage(idleAni[aniIndex], (int) xDelta, (int) yDelta,94,96, null);
+    }
+
+    private void updateAnimationTick() {
+        aniTick++;
+        if(aniTick >= aniSpeed){
+            aniTick = 0;
+            aniIndex++;
+            if(aniIndex >= idleAni.length)
+                aniIndex = 0;
+        }
     }
 
 }
