@@ -21,14 +21,13 @@ public class GamePanel extends JPanel {
     private float xDelta = 100, yDelta = 100;
     private BufferedImage img;
     private BufferedImage[][] animations;
-    private int aniTick, aniIndex, aniSpeed = 40;
+    private int aniTick, aniIndex, aniSpeed = 15;
     private int playerAction = IDLE;
     private int playerDir = -1;
     private boolean moving = false;
 
     public GamePanel() {
         mouseInputs = new MouseInputs(this);
-
         importImg();
         loadAnimations();
 
@@ -39,67 +38,62 @@ public class GamePanel extends JPanel {
     }
 
     private void loadAnimations() {
-        animations = new BufferedImage[12][8];
-        //y = 7 perche' nello sprite alla posizione y = 7
-        //sono presenti le 4 animazioni idle (inattivo)
-        for (int j = 0; j < animations.length; j++){
-            for (int i = 0; i < animations[j].length; i++){
-                animations[j][i] = img.getSubimage(i*46, j*48,46,48);
-            }
-        }
-
+        animations = new BufferedImage[9][6];
+        for (int j = 0; j < animations.length; j++)
+            for (int i = 0; i < animations[j].length; i++)
+                animations[j][i] = img.getSubimage(i * 64, j * 40, 64, 40);
     }
 
     private void importImg() {
-        InputStream is = getClass().getResourceAsStream("/Biker.png");
-
+        InputStream is = getClass().getResourceAsStream("/player_sprites.png");
         try {
             img = ImageIO.read(is);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            try{
+            try {
                 is.close();
-            } catch (IOException cagacazzo) {
-                cagacazzo.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
-
     }
 
     private void setPanelSize() {
         Dimension size = new Dimension(1280, 800);
-        setMinimumSize(size);
         setPreferredSize(size);
-        setMaximumSize(size);
     }
 
     public void setDirection(int direction) {
-        this.playerAction = direction;
+        this.playerDir = direction;
         moving = true;
     }
 
-    public void setMoving(boolean moving){
+    public void setMoving(boolean moving) {
         this.moving = moving;
     }
 
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        /**
-         * Nello sprite biker.png, il player e' 48x48
-         * e come se fosse "battaglia navale" per prendere un altro sprite,
-         * uso le sue coordinate come se fosse una matrice e le moltiplico per i pixel (48)
-         */
-        updateAnimationTick();
-        //subImg = img.getSubimage(1*48,1*48,48,48);
-        setAnimation();
-        updatePos();
-        g.drawImage(animations[playerAction][aniIndex], (int) xDelta, (int) yDelta,138,144, null);
+    private void updateAnimationTick() {
+        aniTick++;
+        if (aniTick >= aniSpeed) {
+            aniTick = 0;
+            aniIndex++;
+            if (aniIndex >= GetSpriteAmount(playerAction))
+                aniIndex = 0;
+        }
+
+    }
+
+    private void setAnimation() {
+        if (moving)
+            playerAction = RUNNING;
+        else
+            playerAction = IDLE;
     }
 
     private void updatePos() {
-        if(moving){
-            switch(playerDir){
+        if (moving) {
+            switch (playerDir) {
                 case LEFT:
                     xDelta -= 5;
                     break;
@@ -116,23 +110,14 @@ public class GamePanel extends JPanel {
         }
     }
 
-    private void setAnimation() {
-        if(moving)
-            playerAction = RUN;
-        else
-            playerAction = IDLE;
-    }
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
 
+        updateAnimationTick();
+        setAnimation();
+        updatePos();
 
-
-    private void updateAnimationTick() {
-        aniTick++;
-        if(aniTick >= aniSpeed){
-            aniTick = 0;
-            aniIndex++;
-            if(aniIndex >= getSpriteAmount(playerAction))
-                aniIndex = 0;
-        }
+        g.drawImage(animations[playerAction][aniIndex], (int) xDelta, (int) yDelta, 256, 160, null);
     }
 
 }

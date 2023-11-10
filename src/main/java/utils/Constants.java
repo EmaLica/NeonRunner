@@ -1,52 +1,44 @@
 package utils;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class Constants {
-
-    public static class Directions{
+    public static class Directions {
         public static final int LEFT = 0;
         public static final int UP = 1;
         public static final int RIGHT = 2;
         public static final int DOWN = 3;
-
     }
-
 
     public static class PlayerConstants {
-        public static final int ATTACK_1 = 0;
-        public static final int ATTACK_2 = 1;
-        public static final int ATTACK_3 = 2;
-        public static final int CLIMB = 3;
-        public static final int DEATH = 4;
-        public static final int DOUBLE_JUMP = 5;
-        public static final int HURT = 6;
-        public static final int IDLE = 7;
-        public static final int JUMP = 8;
-        public static final int PUNCH = 9;
-        public static final int RUN = 10;
-        public static final int RUN_ATTACK = 11;
+        public static final int IDLE = 0;
+        public static final int RUNNING = 1;
+        public static final int JUMP = 2;
+        public static final int FALLING = 3;
+        public static final int GROUND = 4;
+        public static final int HIT = 5;
+        public static final int ATTACK_1 = 6;
+        public static final int ATTACK_JUMP_1 = 7;
+        public static final int ATTACK_JUMP_2 = 8;
 
-        private static final Map<Integer, Integer> spriteAmounts = new HashMap<>();
-
-        static {
-            spriteAmounts.put(ATTACK_1, 6);
-            spriteAmounts.put(ATTACK_2, 8);
-            spriteAmounts.put(ATTACK_3, 8);
-            spriteAmounts.put(CLIMB, 6);
-            spriteAmounts.put(DEATH, 6);
-            spriteAmounts.put(DOUBLE_JUMP, 6);
-            spriteAmounts.put(HURT, 2);
-            spriteAmounts.put(IDLE, 4);
-            spriteAmounts.put(JUMP, 4);
-            spriteAmounts.put(PUNCH, 6);
-            spriteAmounts.put(RUN, 6);
-            spriteAmounts.put(RUN_ATTACK, 6);
-        }
-
-        public static int getSpriteAmount(int player_action) {
-            return spriteAmounts.getOrDefault(player_action, 1);
+        public static int GetSpriteAmount(int player_action) {
+            switch (player_action) {
+                case RUNNING:
+                    return 6;
+                case IDLE:
+                    return 5;
+                case HIT:
+                    return 4;
+                case JUMP:
+                case ATTACK_1:
+                case ATTACK_JUMP_1:
+                case ATTACK_JUMP_2:
+                    return 3;
+                case GROUND:
+                    return 2;
+                case FALLING:
+                default:
+                    return 1;
+            }
         }
     }
+
 }

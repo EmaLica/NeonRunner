@@ -3,9 +3,7 @@ package inputs;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import main.Game;
 import main.GamePanel;
-
 import static utils.Constants.Directions.*;
 
 public class KeyboardInputs implements KeyListener {
@@ -18,7 +16,6 @@ public class KeyboardInputs implements KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
-
 
     }
 
@@ -51,5 +48,4 @@ public class KeyboardInputs implements KeyListener {
                 break;
         }
     }
-
 }
